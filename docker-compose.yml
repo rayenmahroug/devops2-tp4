@@ -3,7 +3,7 @@ name: tp4
 services:
   # ---------------- Base de données ----------------
   postgres:
-    image: postgres:16-alpine
+    image: localhost:8083/library/postgres:16-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -31,7 +31,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
       - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
     ports:
-      - "${PGADMIN_PORT:-5050}:80"
+      - "${PGADMIN_PORT:-5051}:80"
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,7 +58,7 @@ services:
     volumes:
       - strapi-uploads:/opt/app/public/uploads
     ports:
-      - "${STRAPI_PORT:-1337}:1337"
+      - "${STRAPI_PORT:-1338}:1337"
     depends_on:
       postgres:
         condition: service_healthy
@@ -70,12 +70,7 @@ services:
       start_period: 30s
     # ---------------- Front-end ----------------
   frontend:
-    build:
-      context: ./frontend
-      # Pendant le build, "nexus" désigne la machine hôte, où Nexus publie le port 8081
-      extra_hosts:
-        - "nexus:host-gateway"
-    image: tp4/frontend:dev
+    image: localhost:8083/cours-frontend:1.0.0
     restart: unless-stopped
     environment:
       # Appel serveur à serveur : on utilise le nom du service, pas "localhost"
