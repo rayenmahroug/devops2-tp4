@@ -1,5 +1,13 @@
+
 import { describe, expect, it } from "vitest";
-import { filterCours, formatDuration, sortBySession, type Cours } from "../src/index";
+
+import {
+  filterCours,
+  formatDuration,
+  formatLevel,
+  sortBySession,
+  type Cours,
+} from "../src/index";
 
 function unCours(overrides: Partial<Cours>): Cours {
   return {
@@ -16,10 +24,33 @@ function unCours(overrides: Partial<Cours>): Cours {
 }
 
 const COURS: Cours[] = [
-  unCours({ documentId: "a", title: "Conteneurs avec Docker", session: 3, level: "intermediaire", topics: ["Docker"] }),
-  unCours({ documentId: "b", title: "Introduction au DevOps", session: 1, level: "debutant" }),
-  unCours({ documentId: "c", title: "Intégration et déploiement continus", session: 6, level: "avance", topics: ["Pipeline"] }),
-  unCours({ documentId: "d", title: "Git et travail collaboratif", session: 2, level: "debutant", topics: ["Git"] }),
+  unCours({
+    documentId: "a",
+    title: "Conteneurs avec Docker",
+    session: 3,
+    level: "intermediaire",
+    topics: ["Docker"],
+  }),
+  unCours({
+    documentId: "b",
+    title: "Introduction au DevOps",
+    session: 1,
+    level: "debutant",
+  }),
+  unCours({
+    documentId: "c",
+    title: "Intégration et déploiement continus",
+    session: 6,
+    level: "avance",
+    topics: ["Pipeline"],
+  }),
+  unCours({
+    documentId: "d",
+    title: "Git et travail collaboratif",
+    session: 2,
+    level: "debutant",
+    topics: ["Git"],
+  }),
 ];
 
 describe("formatDuration", () => {
@@ -46,7 +77,10 @@ describe("filterCours", () => {
   });
 
   it("filtre par niveau", () => {
-    const resultat = filterCours(COURS, { level: "debutant" });
+    const resultat = filterCours(COURS, {
+      level: "debutant",
+    });
+
     expect(resultat.map((c) => c.documentId)).toEqual(["b", "d"]);
   });
 
@@ -55,22 +89,50 @@ describe("filterCours", () => {
   });
 
   it("renvoie une liste vide quand il n'y a aucun cours", () => {
-    expect(filterCours([], { query: "docker", level: "avance" })).toEqual([]);
+    expect(
+      filterCours([], {
+        query: "docker",
+        level: "avance",
+      }),
+    ).toEqual([]);
   });
 
   it("combine la recherche et le niveau", () => {
-    const resultat = filterCours(COURS, { query: "git", level: "debutant" });
+    const resultat = filterCours(COURS, {
+      query: "git",
+      level: "debutant",
+    });
+
     expect(resultat.map((c) => c.documentId)).toEqual(["d"]);
   });
 });
 
 describe("sortBySession", () => {
   it("trie les cours par numéro de séance", () => {
-    expect(sortBySession(COURS).map((c) => c.session)).toEqual([1, 2, 3, 6]);
+    expect(sortBySession(COURS).map((c) => c.session)).toEqual([
+      1, 2, 3, 6,
+    ]);
   });
 
   it("ne modifie pas le tableau d'origine", () => {
     sortBySession(COURS);
-    expect(COURS.map((c) => c.session)).toEqual([3, 1, 6, 2]);
+
+    expect(COURS.map((c) => c.session)).toEqual([
+      3, 1, 6, 2,
+    ]);
+  });
+});
+
+describe("formatLevel", () => {
+  it("renvoie le libellé du niveau", () => {
+    expect(formatLevel("avance")).toBe("Avancé");
+  });
+
+  it("renvoie le libellé du niveau débutant", () => {
+    expect(formatLevel("debutant")).toBe("Débutant");
+  });
+
+  it("renvoie le libellé du niveau intermédiaire", () => {
+    expect(formatLevel("intermediaire")).toBe("Intermédiaire");
   });
 });

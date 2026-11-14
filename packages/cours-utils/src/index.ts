@@ -18,6 +18,10 @@ export const LEVEL_LABELS: Record<Level, string> = {
   avance: "Avancé",
 };
 
+export function formatLevel(level: Level): string {
+  return LEVEL_LABELS[level];
+}
+
 // 45 → "45 min", 90 → "1 h 30"
 export function formatDuration(minutes: number): string {
   if (minutes < 60) {
