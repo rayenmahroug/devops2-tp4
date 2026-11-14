@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import type { Cours } from "@devops2/cours-utils";
 import CoursCard from "@/components/CoursCard";
-import type { Cours } from "@/lib/cours";
 
 const COURS: Cours = {
   id: 3,

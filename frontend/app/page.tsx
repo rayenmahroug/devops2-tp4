@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
+import { sortBySession } from "@devops2/cours-utils";
 import CoursList from "@/components/CoursList";
 import DevOpsLoop from "@/components/DevOpsLoop";
 import { getCours } from "@/lib/api";
-import { sortBySession } from "@/lib/cours";
 
 // Rendu à la requête (pas au build) : Strapi n'est pas joignable pendant "next build"
 async function CoursSection() {
